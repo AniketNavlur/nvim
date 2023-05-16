@@ -1,7 +1,7 @@
 return {
     'folke/neodev.nvim',
 
-     requires = {
+     dependencies = {
         'neovim/nvim-lspconfig',
     },
 

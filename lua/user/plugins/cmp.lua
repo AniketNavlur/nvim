@@ -1,6 +1,6 @@
 return {
     'hrsh7th/nvim-cmp',
-    requires = {
+     dependencies = {
         'neovim/nvim-lspconfig',
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-nvim-lua',

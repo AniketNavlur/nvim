@@ -15,7 +15,7 @@ return {
             integrations = {
                 telescope = true,
                 cmp = true,
-                neotree = true,
+                neotree = false,
                 which_key = true,
                 gitsigns = true,
                 symbols_outline = true,

@@ -10,7 +10,6 @@ local plugins = {
 
     'neovim/nvim-lspconfig',
 
-    -- require("user.plugins.coq"),
     require("user.plugins.cmp"),
 
     require("user.plugins.nvim-treesitter"),
@@ -27,14 +26,11 @@ local plugins = {
 
     require("user.plugins.bufferline"),
 
-    -- require("user.plugins.symbols-outline"),
     require("user.plugins.nvim-navbuddy"),
     require("user.plugins.barbecue"),
 
-    -- { 'sindrets/diffview.nvim', dependencies = 'nvim-lua/plenary.nvim' }
     require("user.plugins.gitsigns"),
-
-    'kdheepak/lazygit.nvim',
+    require("user.plugins.lazygit"),
 
     require("user.plugins.auto-session"),
 

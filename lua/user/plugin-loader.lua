@@ -3,7 +3,6 @@ local M = {}
 local plugin_manager = require("user.plugin-manager.lazy-nvim")
 
 local plugins = {
-    'wbthomason/packer.nvim',
 
     'dstein64/vim-startuptime',
 

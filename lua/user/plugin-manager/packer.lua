@@ -48,6 +48,8 @@ local packer_bootstrap = ensure_packer()
 
 function M.load_plugins(plugins, opts)
     return require("packer").startup(function(use)
+        use ('wbthomason/packer.nvim')
+
         for _, spec in pairs(plugins) do
             use(packerize(spec))
         end

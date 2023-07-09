@@ -45,5 +45,8 @@ return {
                 },
             },
         }
+
+        local core = require("user.core")
+        core.cmd.register_cmd("workbench.view.outline", "Navbuddy")
     end
 }

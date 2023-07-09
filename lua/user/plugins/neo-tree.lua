@@ -52,6 +52,8 @@ return {
             }
         }
 
-        vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
+        local core = require("user.core")
+        core.cmd.register_cmd("workbench.view.explorer", "Neotree toggle")
+        core.cmd.register_cmd("git.status", "Neotree git_status")
     end
 }

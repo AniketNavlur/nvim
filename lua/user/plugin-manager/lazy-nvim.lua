@@ -14,6 +14,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 function M.load_plugins(plugins, opts)
+    local core = require("user.core")
+    core.cmd.register_cmd("workbench.view.plugin-manager", "Lazy")
     return require("lazy").setup(plugins, opts)
 end
 

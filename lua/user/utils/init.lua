@@ -51,4 +51,14 @@ function M.split_str(str, sep)
     return matches
 end
 
+function M.make_func(callable, args)
+    return function()
+        callable(args)
+    end
+end
+
+function M.make_nvim_cmd(command)
+    return "<cmd>" .. command .. "<cr>"
+end
+
 return M

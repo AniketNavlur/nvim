@@ -41,9 +41,9 @@ else
 end
 
 M.on_attach = function(client, bufnr)
-    local opts = keymaps.get_opts()
+    local opts = keymaps.default_opts()
     opts.buffer = bufnr
-    keymaps.register_keymaps(keymaps.lsp_keymaps(), opts)
+    keymaps.register_keymaps(keymaps.get_keymaps("lsp-keymaps"), opts)
 
     local attachs = require("user.lsp").get_registered_attachs()
 

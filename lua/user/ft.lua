@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         "startuptime",
     },
     callback = function()
-        local opts = keymap.get_opts()
+        local opts = keymap.default_opts()
         opts.buffer = 0
         keymap.set_keymap("n", "q", ":close<cr>", opts)
     end,

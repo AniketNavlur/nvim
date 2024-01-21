@@ -1,7 +1,5 @@
 local M = {}
 
-local has_wk, wk = pcall(require, "which-key")
-
 function M.setup(core_lib)
     M.core_lib = core_lib
 end

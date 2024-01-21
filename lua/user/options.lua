@@ -23,6 +23,12 @@ vim.opt.termguicolors = true
 vim.opt.laststatus = 3
 vim.opt.scrolloff = 3
 
+vim.opt.foldlevelstart = 99
+vim.opt.foldlevel = 99
+vim.opt.foldcolumn = '0'
+vim.opt.foldenable = true
+vim.opt.updatetime = 300
+
 
 vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd [[set iskeyword+=-]]

@@ -24,6 +24,7 @@ function M.setup(core_lib)
     M.register_cmd("editor.action.toggle_block_comment")
     M.register_cmd("editor.action.toggle_line_comment")
     M.register_cmd("editor.search")
+    M.register_cmd("editor.toggle_hardtime")
 
     M.register_cmd("editor.action.source_actions",
         function()
@@ -50,6 +51,7 @@ function M.setup(core_lib)
     M.register_cmd("workbench.view.search")
     M.register_cmd("workbench.view.debug")
     M.register_cmd("workbench.view.outline")
+    M.register_cmd("workbench.view.symbol-navigator")
     M.register_cmd("workbench.view.terminal")
     M.register_cmd("workbench.view.problems", vim.diagnostic.setloclist)
     M.register_cmd("workbench.view.bookmarks", "marks")
@@ -74,20 +76,40 @@ function M.setup(core_lib)
 
     M.register_cmd("git.status", "!git status")
     M.register_cmd("git.stage_selected")
-    M.register_cmd("git.unstage_selected")
     M.register_cmd("git.reset_selected")
+    M.register_cmd("git.stage_hunk")
+    M.register_cmd("git.reset_hunk")
+    M.register_cmd("git.preview_hunk")
     M.register_cmd("git.stage_file")
-    M.register_cmd("git.unstage_file")
     M.register_cmd("git.reset_file")
+    M.register_cmd("git.diff")
     M.register_cmd("git.commit_staged")
     M.register_cmd("git.stash")
-    M.register_cmd("git.reset")
     M.register_cmd("git.rebase_interactive")
     M.register_cmd("git.mergetool")
     M.register_cmd("git.fetch")
     M.register_cmd("git.pull")
     M.register_cmd("git.push")
     M.register_cmd("git.git-graph", "!git log --graph --oneline --all")
+
+    vim.api.nvim_create_user_command(
+        "Cmd",
+        function(fargs)
+            M.dispatch(fargs.args)
+        end,
+
+        {
+            nargs = 1,
+            complete = function(_, _, _)
+                local keys = {}
+                for key, _ in pairs(M.commands) do
+                    table.insert(keys, key)
+                end
+                return keys
+            end
+        }
+    )
+
 end
 
 function M.register_cmd(api_name, func)
@@ -106,8 +128,10 @@ function M.dispatch(api_name)
     if cmd == nil then
         vim.notify("Not Implemented: " .. api_name, vim.log.levels.WARN)
     elseif type(cmd) == 'function' then
+        -- vim.notify(api_name .. ": " .. tostring(cmd), vim.log.levels.INFO)
         cmd()
     elseif type(cmd) == 'string' then
+        -- vim.notify(api_name .. ": " .. cmd, vim.log.levels.INFO)
         vim.cmd(cmd)
     else
         vim.notify("Not supported: cmd type `" .. type(cmd) "` for" .. api_name, vim.log.levels.WARN)

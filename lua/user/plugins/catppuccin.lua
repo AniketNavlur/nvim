@@ -13,12 +13,17 @@ return {
             },
             --]]
             integrations = {
+                aerial = true,
                 telescope = true,
                 cmp = true,
-                neotree = false,
+                neotree = true,
+                neogit = true,
                 which_key = true,
                 gitsigns = true,
                 symbols_outline = true,
+                markdown = true,
+                lsp_saga = true,
+                ufo = true,
                 native_lsp = {
                     enabled = true,
                     virtual_text = {
@@ -42,6 +47,5 @@ return {
         })
 
         vim.cmd.colorscheme "catppuccin"
-
     end
 }

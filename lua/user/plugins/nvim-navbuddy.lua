@@ -30,7 +30,7 @@ return {
 
         require("nvim-navbuddy").setup {
             window = {
-                size = "99%", -- Or table format example: { height = "40%", width = "100%"}
+                size = "97%", -- Or table format example: { height = "40%", width = "100%"}
                 --position = "50%", -- Or table format example: { row = "100%", col = "0%"}
                 sections = {
                     left  = {
@@ -47,6 +47,6 @@ return {
         }
 
         local core = require("user.core")
-        core.cmd.register_cmd("workbench.view.outline", "Navbuddy")
+        core.cmd.register_cmd("workbench.view.symbol-navigator", "Navbuddy")
     end
 }

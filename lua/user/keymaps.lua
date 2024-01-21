@@ -14,25 +14,14 @@ end
 
 local vim_cmd = utils.make_nvim_cmd
 
-core.cmd.invoke("editor.action.toggle_block_comment")
-core.cmd.invoke("editor.action.toggle_line_comment")
-core.cmd.invoke("workbench.view.search")
-core.cmd.invoke("workbench.view.debug")
-core.cmd.invoke("workbench.view.bookmarks")
-core.cmd.invoke("workbench.view.quickfix")
-core.cmd.invoke("workbench.view.loclist")
-core.cmd.invoke("workbench.action.close_all_editors")
-core.cmd.invoke("workbench.action.close_other_editors")
-core.cmd.invoke("workbench.files.select_for_compare")
-core.cmd.invoke("workbench.files.compare_selected")
-
 local KEYMAPS = {
     ["user-keymaps"] = {
 
         cmd.bind("n", "<leader>P", "workbench.view.plugin-manager"):add_desc("plugin manager"),
         cmd.bind("n", "<leader>e", "workbench.view.explorer"):add_desc("explorer"),
         cmd.bind("n", "<leader>t", "workbench.view.terminal"):add_desc("terminal"),
-        cmd.bind("n", "<leader>n", "workbench.view.outline"):add_desc("outline"),
+        cmd.bind("n", "<leader>o", "workbench.view.outline"):add_desc("outline"),
+        cmd.bind("n", "<leader>n", "workbench.view.symbol-navigator"):add_desc("symbol-navigator"),
         cmd.bind("n", "<C-p>", "workbench.action.quick_open"):add_desc("quick open file"),
         cmd.bind("n", "<leader>q", "workbench.action.close_active_editor"):add_desc("close buffer"),
 
@@ -41,6 +30,12 @@ local KEYMAPS = {
         cmd.bind("n", "<leader>sb", "editor.search"):add_desc("search buffer"),
         cmd.bind("n", "<leader>sp", "workbench.view.search"):add_desc("live search project"),
         cmd.bind("n", "<leader>/", "workbench.view.search"):add_desc("live search project"),
+
+        -- buffers
+        keys.bind("n", "<leader>b"):add_prefix("+buffers"),
+        cmd.bind("n", "<leader>bD", "workbench.action.close_all_editors"):add_desc("close all buffers"),
+        cmd.bind("n", "<leader>bd", "workbench.action.close_other_editors"):add_desc("close other buffers"),
+        cmd.bind("n", "<leader>bq", "workbench.action.close_active_editor"):add_desc("close buffer"),
 
         -- indent text
         keys.bind("v", "<", "<gv"):add_desc("indent <"),
@@ -55,6 +50,17 @@ local KEYMAPS = {
         -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
         keys.bind("n|x|o", "n", "'Nn'[v:searchforward]"):add_opts({ expr = true }):add_desc("Next Search Result"),
         keys.bind("n|x|o", "N", "'nN'[v:searchforward]"):add_opts({ expr = true }):add_desc("Prev Search Result"),
+
+        keys.bind("n", "<ESC>", "<ESC><C-l>"):add_desc("refresh"),
+
+        keys.bind("n", "<leader> ", " "):add_desc("space"),
+
+        keys.bind("i", "<C-h>", "<Left>"),
+        keys.bind("i", "<C-j>", "<Down>"),
+        keys.bind("i", "<C-k>", "<Up>"),
+        keys.bind("i", "<C-l>", "<Right>"),
+
+        cmd.bind("n", "<leader>h", "editor.toggle_hardtime"):add_desc("toggle hardtime"),
 
         -- add undo breakpoints in insert mode
         keys.bind("i", ".", ".<C-g>u"):add_desc("add undo break point"),
@@ -90,23 +96,24 @@ local KEYMAPS = {
         cmd.bind("v", "<leader>lf", "editor.action.format_selection"):add_desc("format selection"),
 
         -- show signature
-        keys.bind("n|i", "<C-k>", vim.lsp.buf.signature_help):add_desc("show signature"),
+        keys.bind("n", "<C-k>", vim.lsp.buf.signature_help):add_desc("show signature"),
     },
 
     ["git-keymaps"] = {
 
         keys.bind("n|v", "<leader>g"):add_prefix("+git"),
         cmd.bind("n", "<leader>G", "workbench.view.git"):add_desc("git"),
-        cmd.bind("v", "<leader>g+", "git.stage_selected"):add_desc("git stage range"),
-        cmd.bind("v", "<leader>g-", "git.unstage_selected"):add_desc("git unstage range"),
-        cmd.bind("v", "<leader>gr", "git.reset_selected"):add_desc("git reset range"),
-        cmd.bind("n", "<leader>ga", "git.stage_file"):add_desc("git stage file"),
-        cmd.bind("n", "<leader>gu", "git.unstage_file"):add_desc("git unstage file"),
-        cmd.bind("n", "<leader>gr", "git.reset_file"):add_desc("git reset file"),
+        cmd.bind("v", "<leader>ga", "git.stage_selected"):add_desc("git stage range"),
+        cmd.bind("v", "<leader>gu", "git.reset_selected"):add_desc("git reset range"),
+        cmd.bind("n", "<leader>ga", "git.stage_hunk"):add_desc("git stage hunk"),
+        cmd.bind("n", "<leader>gu", "git.reset_hunk"):add_desc("git reset hunk"),
+        cmd.bind("n", "<leader>gh", "git.preview_hunk"):add_desc("git preview hunk"),
+        cmd.bind("n", "<leader>gA", "git.stage_file"):add_desc("git stage file"),
+        cmd.bind("n", "<leader>gU", "git.reset_file"):add_desc("git reset file"),
+        cmd.bind("n", "<leader>gd", "git.diff"):add_desc("git diff"),
         cmd.bind("n", "<leader>gs", "git.status"):add_desc("git status"),
         cmd.bind("n", "<leader>gc", "git.commit_staged"):add_desc("git commit"),
         cmd.bind("n", "<leader>gS", "git.stash"):add_desc("git stash"),
-        cmd.bind("n", "<leader>gR", "git.reset"):add_desc("git reset"),
         cmd.bind("n", "<leader>gi", "git.rebase_interactive"):add_desc("git rebase --interactive"),
         cmd.bind("n", "<leader>gM", "git.mergetool"):add_desc("git mergetool"),
         cmd.bind("n", "<leader>gf", "git.fetch"):add_desc("git fetch"),
@@ -141,7 +148,8 @@ function M.register_keymaps(keymaps, opts)
     for _, mapping in pairs(keymaps) do
         if mapping.prefix then
             for _, m in pairs(mapping.mode) do
-                _ = has_wk and wk.register({ [mapping.keys] = { name = mapping.prefix } }, { mode = m })
+                _ = has_wk and
+                    wk.register({ [mapping.keys] = { name = mapping.prefix } }, { mode = m, buffer = opts.buffer or nil })
             end
         end
         mapping.register(opts)

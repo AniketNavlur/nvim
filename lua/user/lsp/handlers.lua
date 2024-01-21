@@ -36,6 +36,13 @@ M.capabilities.textDocument.completion.completionItem.snippetSupport = true
 local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
 if ok then
     M.capabilities = cmp_nvim_lsp.default_capabilities(M.capabilities)
+
+    --[[
+    M.capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true
+    }
+    --]]
 else
     vim.notify("cmp_nvim_lsp not loaded")
 end

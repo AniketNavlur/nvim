@@ -1,6 +1,6 @@
 return {
     'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
+    branch = 'v3.x',
     dependencies = {
         'nvim-lua/plenary.nvim',
         'nvim-tree/nvim-web-devicons',
@@ -15,10 +15,12 @@ return {
             popup_border_style = "rounded",
             window = {
                 position = "right",
-                width = 30
+                width = 35
             },
             filesystem = {
-                follow_current_file = true, -- This will find and focus the file in the active buffer every
+                follow_current_file = {
+                    enabled = true
+                }, -- This will find and focus the file in the active buffer every
                 -- time the current file is changed while the tree is open.
             },
             git_status = {
@@ -30,11 +32,11 @@ return {
                     added     = "✚", -- but this is redundant info if you use git_status_colors on the name
                     modified  = "", -- but this is redundant info if you use git_status_colors on the name
                     deleted   = "✖", -- this can only be used in the git_status source
-                    renamed   = "", -- this can only be used in the git_status source
+                    renamed   = "󰁕", -- this can only be used in the git_status source
                     -- Status type
                     untracked = "",
                     ignored   = "",
-                    unstaged  = "",
+                    unstaged  = "󰄱",
                     staged    = "",
                     conflict  = "",
                 }
